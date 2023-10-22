@@ -8,7 +8,7 @@ pygame.font.init()
 pygame.display.set_caption("PokerWord")
 
 #ขนาดหน้าจอเกม
-SCREEN_W = 1280
+SCREEN_W = 960
 SCREEN_H = 720
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 screen_rect = screen.get_rect()
@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 #นำภาพเข้า
-background_img = pygame.image.load("assets/images/background.jpg")
+background_img = pygame.image.load("assets/images/background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
 #ข้อความ
