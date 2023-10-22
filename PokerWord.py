@@ -18,8 +18,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 #นำภาพเข้า
-background = pygame.image.load("assets/images/background.jpg")
-background = pygame.transform.scale(background, (SCREEN_W, SCREEN_H))
+background_img = pygame.image.load("assets/images/background.jpg")
+background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
 #ข้อความ
 type_front = pygame.font.SysFont("arial", 30)
