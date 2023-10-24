@@ -8,8 +8,8 @@ pygame.font.init()
 pygame.display.set_caption("PokerWord")
 
 #ขนาดหน้าจอเกม
-SCREEN_W = 960
-SCREEN_H = 720
+SCREEN_W = 1280
+SCREEN_H = 896
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 screen_rect = screen.get_rect()
 
