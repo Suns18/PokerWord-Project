@@ -1,4 +1,5 @@
 import pygame
+import button
 
 #ประกาศใช้งาน
 pygame.init
@@ -21,9 +22,9 @@ WHITE = (255, 255, 255)
 background_img = pygame.image.load("assets/images/background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
-#ข้อความ
-type_front = pygame.font.SysFont("arial", 30)
-mess_start = type_front.render("Start", True, BLACK)
+#START
+start_img = pygame.image.load("assets/images/start_button.png")
+start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 4)
 
 #แสดงเกม
 def main_menu():
@@ -34,8 +35,10 @@ def main_menu():
             if event.type == pygame.QUIT:
                 running = False
         screen.blit(background, (0, 0))
-        pygame.draw.rect(background, WHITE, (screen_rect.centerx - 30, screen_rect.centery + 70, 55, 40))
-        screen.blit(mess_start, (screen_rect.centerx - 30, screen_rect.centery + 70))
+        if start_button.draw(screen):
+            print('START')
         pygame.display.update()
     pygame.quit()
+
+
 main_menu()
