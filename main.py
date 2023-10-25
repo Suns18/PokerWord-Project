@@ -24,7 +24,11 @@ background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
 #START
 start_img = pygame.image.load("assets/images/start_button.png")
-start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 4)
+start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 5)
+
+#EXIT
+exit_img = pygame.image.load("assets/images/exit_button.png")
+exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5)
 
 #แสดงเกม
 def main_menu():
@@ -37,6 +41,9 @@ def main_menu():
         screen.blit(background, (0, 0))
         if start_button.draw(screen):
             print('START')
+        if exit_button.draw(screen):
+            running = False
+        
         pygame.display.update()
     pygame.quit()
 
