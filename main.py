@@ -6,7 +6,7 @@ pygame.init
 pygame.font.init()
 
 #หัวข้อเกม
-pygame.display.set_caption("PokerWord")
+pygame.display.set_caption("PyFight")
 
 #ขนาดหน้าจอเกม
 SCREEN_W = 1280
@@ -22,13 +22,16 @@ WHITE = (255, 255, 255)
 background_img = pygame.image.load("assets/images/background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
+#HOVER
+hover_img = pygame.image.load("assets/images/hover_button.png")
+
 #START
 start_img = pygame.image.load("assets/images/start_button.png")
-start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 5)
+start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 5, hover_img)
 
 #EXIT
 exit_img = pygame.image.load("assets/images/exit_button.png")
-exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5)
+exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5, hover_img)
 
 #แสดงเกม
 def main_menu():
