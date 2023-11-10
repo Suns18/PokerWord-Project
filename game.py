@@ -1,11 +1,13 @@
 """Game Menu"""
 import pygame, sys
+import game_ui
 import button
 
 pygame.init
 
 SCREEN_W = 1280
 SCREEN_H = 896
+SCALE = 4
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 screen_rect = screen.get_rect()
 
@@ -24,7 +26,29 @@ enter_img = pygame.image.load("assets/images/exit_button.png")
 enter_button = button.Button(input_img, screen_rect.centerx, screen_rect.centery + 100, 4, hover_img)
 
 
+#HOVER
+hover_img = pygame.image.load("assets/images/hover_button.png")
 
+#INPUT
+input_img = pygame.image.load("assets/images/start_button.png")
+input_button = button.Button(input_img, 150, SCREEN_H - 100, 4, hover_img)
+
+#ENTER INPUT
+enter_img = pygame.image.load("assets/images/exit_button.png")
+enter_button = button.Button(input_img, screen_rect.centerx, screen_rect.centery + 100, 4, hover_img)
+
+
+
+player_health = 30
+enemy_health = 100
+
+vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
+
+
+def show_health():
+    """Show player and enemy health"""
+    vs_show.draw(screen)
+ 
 def main_game():
     """main game"""
     base_font = pygame.font.Font(None, 64)
@@ -34,6 +58,7 @@ def main_game():
     while True:
         for event in pygame.event.get():
             screen.blit(background, (0, 0))
+            show_health()
 
             #input field
             text_surface = base_font.render(text_input, True, (255, 255, 255))
@@ -63,3 +88,5 @@ def main_game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+main_game()
