@@ -17,8 +17,7 @@ background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 player_health = 30
 enemy_health = 100
 
-vs_text = pygame.image.load("assets/images/vs.png")
-vs_show = game_ui.GameUI(vs_text, screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
+vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
 
 
 def show_health():

@@ -4,8 +4,9 @@ import pygame
 
 class GameUI():
     """Game UI"""
-    def __init__(self, image, pos_x, pos_y, scale):
+    def __init__(self, image_url, pos_x, pos_y, scale):
         """Init"""
+        image = pygame.image.load(image_url)
         width = image.get_width() * scale
         height = image.get_height() * scale
         self.image = pygame.transform.scale(image, (int(width), int(height)))
