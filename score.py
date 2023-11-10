@@ -48,13 +48,19 @@ freeze_card = 0
 my_card = ["heal_card", "shield_card", "power_card", "freeze_card"]
 while True:
    attact = 0
+   spam = False
    word = input()
+   
+   #เช็คคำ
    if word in lstmethod or word in lstmethodimport:
       for char in word:
          attact += score[char]
       if count == 0:
          lstans.append(word)
          count += 1
+      elif count >= 1 and word in lstans:
+         count = 0
+         spam = True
       elif count == 3:
          lstans.clear()
          count = 0
@@ -67,22 +73,39 @@ while True:
             power_card += 1
          elif card_increase == "freeze_card":
             freeze_card += 1
-      elif count >= 1 and word in lstans:
-         count = 0
+      else:
+         lstans.append(word)
+         count += 1
    else:
       count = 0
-   #ใช้การ์ดพิเศษ
-   if heal_card:
+      spam = True
+   
+   #เราตี
+   if heal_card and not spam:
       my_HP += 10
       bear_HP -= random.uniform(attact*0.2, attact)
-   elif shield_card:
+   elif heal_card and spam:
+      my_HP += 10
+      bear_HP -= 1
+   elif shield_card and not spam:
       shield += 2
       bear_HP -= random.uniform(attact*0.2, attact)
-   elif power_card:
+   elif shield_card and spam:
+      shield += 2
+      bear_HP -= 1
+   elif power_card and not spam:
       bear_HP -= attact
+   elif power_card and spam:
+      bear_HP -= 2
    elif freeze_card:
       bear_HP += 10
       skip = True
+   elif spam:
+      bear_HP -= 1
+   elif not spam:
+      bear_HP -= random.uniform(attact*0.2, attact)
+   
+   #หมีตี
    if skip:
       skip = False
    elif shield > 0:
