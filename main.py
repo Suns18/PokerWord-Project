@@ -19,7 +19,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 #นำภาพเข้า
-background_img = pygame.image.load("assets/images/background.png")
+background_img = pygame.image.load("assets/images/menu_background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
 #HOVER
