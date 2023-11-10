@@ -1,5 +1,5 @@
 import pygame
-import button
+import button, game
 
 #ประกาศใช้งาน
 pygame.init
@@ -43,7 +43,7 @@ def main_menu():
                 running = False
         screen.blit(background, (0, 0))
         if start_button.draw(screen):
-            print('START')
+            game.main_game()
         if exit_button.draw(screen):
             running = False
         
