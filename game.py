@@ -26,19 +26,6 @@ enter_img = pygame.image.load("assets/images/exit_button.png")
 enter_button = button.Button(input_img, screen_rect.centerx, screen_rect.centery + 100, 4, hover_img)
 
 
-#HOVER
-hover_img = pygame.image.load("assets/images/hover_button.png")
-
-#INPUT
-input_img = pygame.image.load("assets/images/start_button.png")
-input_button = button.Button(input_img, 150, SCREEN_H - 100, 4, hover_img)
-
-#ENTER INPUT
-enter_img = pygame.image.load("assets/images/exit_button.png")
-enter_button = button.Button(input_img, screen_rect.centerx, screen_rect.centery + 100, 4, hover_img)
-
-
-
 player_health = 30
 enemy_health = 100
 
@@ -88,5 +75,3 @@ def main_game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-main_game()
