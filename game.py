@@ -66,9 +66,8 @@ def main_game():
             card_posx = (screen_rect.centerx - 40) - (50 * (len(text) - 1))
             #show card on screen
             for char in text:
-                card_img = pygame.image.load("assets/alphabet_card/{}_card.png".format(char.lower()))
-                card_img = pygame.transform.scale(card_img, (card_img.get_width() * 2.5, card_img.get_height() * 2.5))
-                screen.blit(card_img, (card_posx, screen_rect.centery - 150))
+                card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
+                card_img.draw(screen)
                 card_posx += 100
 
             pygame.display.update()
