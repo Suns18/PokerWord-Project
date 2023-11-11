@@ -46,9 +46,9 @@ class HealthBar():
         """Draw HP bar"""
         hp_percent = self.hp / self.max_hp * 100
         grid_percent = 100 / (self.grid_width)
-        for i in range(self.grid_width):
-            hp_type = 0 if hp_percent >= grid_percent * (i + 1) else 4 if hp_percent < grid_percent * i else (int(grid_percent * (i + 1) - hp_percent) % 4)
-            screen.blit(self.show_hp_level(hp_type), (self.x + i * self.scale, self.y))
+        for i in range(1, self.grid_width + 1):
+            hp_type = 0 if hp_percent >= grid_percent * i else 4 if hp_percent < grid_percent * i else (int((grid_percent * i - hp_percent) / grid_percent) * 4)
+            screen.blit(self.show_hp_level(hp_type), (self.x + (i-1) * self.scale, self.y))
 
     def draw(self, screen):
         self.draw_bar(screen)

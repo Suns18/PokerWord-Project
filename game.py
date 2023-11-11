@@ -34,7 +34,9 @@ atk_img = pygame.image.load("assets/images/enter_button.png")
 atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
 
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
+player_health.hp = 25
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
+enemy_health.hp = 50
 atk_count = 0
 
 
@@ -49,7 +51,9 @@ def show_health():
 
     #test
     font = pygame.font.Font(None, 32)
-    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_health.hp, enemy_health.hp, player_health.shield, atk_count)
+    player_per = player_health.hp / player_health.max_hp * 100
+    enemy_per = enemy_health.hp / enemy_health.max_hp * 100
+    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_per, enemy_per, player_health.shield, atk_count)
     status_text = font.render(status, True, (255, 255, 255))
     screen.blit(status_text, (0,0))
  
