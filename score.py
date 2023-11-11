@@ -33,4 +33,4 @@ lstmethodimport = ['harmonic_mean', 'mean', 'median', 'median_grouped', 'median_
                    'datetime', 'search', 'sub', 'findall']
 score = { "a": 1, "b": 4, "c": 3, "d": 2, "e": 1, "f": 3, "g": 4, "h": 4, "i": 1, \
          "j": 5, "k": 5, "l": 2, "m": 3, "n": 2, "o": 2, "p": 2, "q": 5, "r": 1, \
-            "s": 1, "t": 1, "u": 3, "v": 4, "w": 5, "x": 5, "y": 5, "z": 5}
+            "s": 1, "t": 1, "u": 3, "v": 4, "w": 5, "x": 5, "y": 5, "z": 5, "_": 0}

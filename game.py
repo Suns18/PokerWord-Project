@@ -99,11 +99,13 @@ def main_game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         text_input = text_input[:-1]
-                    elif event.unicode.isalpha():
+                    elif event.unicode.isalpha() or event.unicode == '_':
                         text_input += event.unicode
                 card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
                 word = text_input
                 for char in word:
+                    if char == '_':
+                        char = 'underscore'
                     card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
                     card_img.draw(screen)
                     card_posx += 100
