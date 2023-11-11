@@ -4,7 +4,7 @@ import game_ui
 import button
 import score
 import random
-import health_bar
+import health_bar, card
 
 pygame.init
 
@@ -22,19 +22,18 @@ hover_img = pygame.image.load("assets/images/hover_button.png")
 
 #INPUT BUTTON
 input_img = pygame.image.load("assets/images/start_button.png")
-input_button = button.Button(input_img, 150, SCREEN_H - 100, 4, hover_img)
+input_button = button.Button(input_img, 150, SCREEN_H - 100, 2, hover_img)
 
 #ENTER INPUT BUTTON
 enter_img = pygame.image.load("assets/images/enter_button.png")
-enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 100, 4, hover_img)
+enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 100, 2, hover_img)
 
 #ATTACK BUTTON
 atk_img = pygame.image.load("assets/images/enter_button.png")
-atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 4, hover_img)
+atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
 
-player_health = health_bar.HealthBar(8 * SCALE, 8 * SCALE, 6, 1, 4, 30)
-enemy_health = 100
-shield = 0
+player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 12, 1, 4, 30, False)
+enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
 atk_count = 0
 
 
@@ -43,11 +42,13 @@ vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCA
 
 def show_health():
     """Show player and enemy health"""
+    player_health.draw(screen)
     vs_show.draw(screen)
+    enemy_health.draw(screen)
 
     #test
     font = pygame.font.Font(None, 32)
-    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_health.hp, enemy_health, shield, atk_count)
+    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_health.hp, enemy_health.hp, player_health.shield, atk_count)
     status_text = font.render(status, True, (255, 255, 255))
     screen.blit(status_text, (0,0))
  
@@ -58,10 +59,7 @@ def main_game():
     word = ""
     input_active = False
 
-    holy_pizza_card = False
-    holy_shield_card = False
-    holy_damage_card = False
-    my_special_cards = ["holy_shield_card", "holy_shield_card", "holy_shield_card"]
+    my_special_cards = []
     special_cards = ["holy_pizza_card", "holy_shield_card", "holy_damage_card"]
 
     used_word = []
@@ -81,111 +79,102 @@ def main_game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         text_input = text_input[:-1]
-                    elif event.unicode.isalpha() and len(text_input) < 10:
+                    elif event.unicode.isalpha():
                         text_input += event.unicode
                 if enter_button.draw(screen):
                     word = text_input
                     text_input = ""
                     input_active = False
 
-            card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
-            special_card_posx = screen_rect.centerx - (75 * (len(my_special_cards) - 1))
+                card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
+                special_card_posx = screen_rect.centerx - (75 * (len(my_special_cards) - 1))
 
-            #show input card on screen
-            for char in word:
-                card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
-                card_img.draw(screen)
-                card_posx += 100
-            #show special card on screen
-            for special_card in my_special_cards:
-                special_img = pygame.image.load("assets/special_card/{}.png".format(special_card))
-                special_card_posy = screen_rect.centery + 325
-                #เช็คการใช้ special card
-                if (holy_pizza_card and special_card == "holy_pizza_card") or (holy_shield_card and special_card == "holy_shield_card") or (holy_damage_card and special_card == "holy_damage_card"):
-                    special_card_posy -= 50
-                special_button = button.Button(special_img, special_card_posx, special_card_posy, 2.5, hover_img)
-                #กดใช้ special card
-                if special_button.draw(screen):
-                    if (holy_pizza_card and special_card == "holy_pizza_card") or (holy_shield_card and special_card == "holy_shield_card") or (holy_damage_card and special_card == "holy_damage_card"):
-                        """กดซ้ำ กลับ True เป็น False"""
-                        holy_pizza_card, holy_shield_card, holy_damage_card = False, False, False
+                #show input card on screen
+                for char in word:
+                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
+                    card_img.draw(screen)
+                    card_posx += 100
+                #show special card on screen
+                for special_card in my_special_cards:
+                    special_img = special_card.image
+                    special_card_posy = screen_rect.centery + 325
+                    #เช็คการใช้ special card
+                    if special_card.state == True:
+                        special_card_posy -= 50
+                    special_button = button.Button(special_img, special_card_posx, special_card_posy, 2.5, hover_img)
+                    #กดใช้ special card
+                    if special_button.draw(screen):
+                        if special_card.state == True:
+                            """กดซ้ำ กลับ True เป็น False"""
+                            special_card.state = False
+                        else:
+                            for icard in my_special_cards:
+                                icard.state = False
+                            special_card.state = True
+                    special_card_posx += 150
+
+                global enemy_health, player_health, atk_count
+                #attack button
+                if atk_button.draw(screen):
+                    attack = 0
+                    attack_random = True
+                    #เช็คคำ
+                    if word in score.lstmethod or word in score.lstmethodimport:
+                        for char in word:
+                            attack += score.score[char]
+                        if atk_count >= 1 and word in used_word:
+                            atk_count = 0
+                            spam = True
+                        else:
+                            used_word.append(word)
+                            atk_count += 1
+
+                        #ได้ special card
+                        if atk_count % 3 == 0 and atk_count != 0:
+                            card_increase = random.choice(special_cards)
+                            my_special_cards.append(card.SpecialCard(card_increase, False))
+
+                        #ใช้ของ
+                        for special_card in my_special_cards:
+                            if special_card.state == True:
+                                if special_card.name == "holy_pizza_card":
+                                    player_health.hp = max(player_health.max_hp, player_health.hp + 10)
+                                elif special_card.name == "holy_shield_card":
+                                    player_health.shield = True
+                                elif special_card.name == "holy_damage_card":
+                                    attack_random = False
+                                my_special_cards.remove(special_card)
+
+                        
+                        #เราตี
+                        if not attack_random and not spam:
+                            enemy_health.hp -= attack
+                        elif not attack_random and spam:
+                            enemy_health.hp -= 2
+                            spam = False
+                        elif attack_random and spam:
+                            enemy_health.hp -= 1
+                            spam = False
+                        elif attack_random and not spam:
+                            enemy_health.hp -= int(random.uniform(attack*0.2, attack))
+                        
+                        #หมีตี
+                        if player_health.shield:
+                            player_health.shield = False
+                        if enemy_health.hp <= 0:
+                            print("You Win")
+                        elif enemy_health.hp <= 20:
+                            player_health.hp -= 10
+                        elif enemy_health.hp <= 50:
+                            player_health.hp -= 5
+                        elif enemy_health.hp <= 100:
+                            player_health.hp -= 3
+                        if player_health.hp <= 0:
+                            print("You Lose")
                     else:
-                        holy_pizza_card, holy_shield_card, holy_damage_card = False, False, False
-                        if special_card == "holy_pizza_card":
-                            holy_pizza_card = True
-                        elif special_card == "holy_shield_card":
-                            holy_shield_card = True
-                        elif special_card == "holy_damage_card":
-                            holy_damage_card = True
-                special_card_posx += 150
-
-            global enemy_health, player_health, shield, atk_count
-            #attack button
-            if atk_button.draw(screen):
-                attack = 0
-                #เช็คคำ
-                if word in score.lstmethod or word in score.lstmethodimport:
-                    for char in word:
-                        attack += score.score[char]
-                    if atk_count >= 1 and word in used_word:
-                        atk_count = 0
-                        spam = True
-                    else:
-                        used_word.append(word)
-                        atk_count += 1
-
-                    #ได้ special card
-                    if atk_count % 3 == 0 and atk_count != 0:
-                        card_increase = random.choice(special_cards)
-                        my_special_cards.append(card_increase)
-
-                    #ใช้ของ
-                    if holy_pizza_card:
-                        player_health.hp += 10
-                        holy_pizza_card = False
-                        my_special_cards.remove("holy_pizza_card")
-                    elif holy_shield_card:
-                        shield += 2
-                        holy_shield_card = False
-                        my_special_cards.remove("holy_shield_card")
-                    
-                    #เราตี
-                    if holy_damage_card and not spam:
-                        enemy_health -= attack
-                        holy_damage_card = False
-                        my_special_cards.remove("holy_damage_card")
-                    elif holy_damage_card and spam:
-                        enemy_health -= 2
-                        spam = False
-                        holy_damage_card = False
-                        my_special_cards.remove("holy_damage_card")
-                    elif spam:
-                        enemy_health -= 1
-                        spam = False
-                    elif not spam:
-                        enemy_health -= random.uniform(attack*0.2, attack)
-                    
-                    #หมีตี
-                    if shield > 0:
-                        shield -= 1
-                    elif enemy_health <= 20:
-                        player_health.hp -= 10
-                    elif enemy_health <= 50:
-                        player_health.hp -= 5
-                    elif enemy_health <= 100:
-                        player_health.hp -= 3
-                    if enemy_health <= 0:
-                        print("You Win")
-                    elif player_health.hp <= 0:
-                        print("You Lose")
-
+                        print("please input again")
                     word = ""
-
-                else:
-                    word = ""
-                    print("please input again")
-
-            pygame.display.update()
+                pygame.display.update()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
