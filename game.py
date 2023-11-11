@@ -4,6 +4,7 @@ import game_ui
 import button
 import score
 import random
+import health_bar
 
 pygame.init
 
@@ -31,7 +32,7 @@ enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery
 atk_img = pygame.image.load("assets/images/enter_button.png")
 atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 4, hover_img)
 
-player_health = 30
+player_health = health_bar.HealthBar(8 * SCALE, 8 * SCALE, 6, 1, 4, 30)
 enemy_health = 100
 shield = 0
 atk_count = 0
@@ -46,7 +47,7 @@ def show_health():
 
     #test
     font = pygame.font.Font(None, 32)
-    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_health, enemy_health, shield, atk_count)
+    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_health.hp, enemy_health, shield, atk_count)
     status_text = font.render(status, True, (255, 255, 255))
     screen.blit(status_text, (0,0))
  
@@ -140,7 +141,7 @@ def main_game():
 
                     #ใช้ของ
                     if holy_pizza_card:
-                        player_health += 10
+                        player_health.hp += 10
                         holy_pizza_card = False
                         my_special_cards.remove("holy_pizza_card")
                     elif holy_shield_card:
@@ -168,14 +169,14 @@ def main_game():
                     if shield > 0:
                         shield -= 1
                     elif enemy_health <= 20:
-                        player_health -= 10
+                        player_health.hp -= 10
                     elif enemy_health <= 50:
-                        player_health -= 5
+                        player_health.hp -= 5
                     elif enemy_health <= 100:
-                        player_health -= 3
+                        player_health.hp -= 3
                     if enemy_health <= 0:
                         print("You Win")
-                    elif player_health <= 0:
+                    elif player_health.hp <= 0:
                         print("You Lose")
 
                     word = ""
