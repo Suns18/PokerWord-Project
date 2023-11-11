@@ -33,7 +33,7 @@ enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery
 atk_img = pygame.image.load("assets/images/enter_button.png")
 atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
 
-player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 12, 1, 4, 30, False)
+player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
 atk_count = 0
 
@@ -130,7 +130,7 @@ def main_game():
                         for special_card in my_special_cards:
                             if special_card.state == True:
                                 if special_card.name == "holy_pizza_card":
-                                    player_health.hp = max(player_health.max_hp, player_health.hp + 10)
+                                    player_health.hp = min(player_health.max_hp, player_health.hp + 10)
                                 elif special_card.name == "holy_shield_card":
                                     player_health.shield = True
                                 elif special_card.name == "holy_damage_card":
