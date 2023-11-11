@@ -22,21 +22,19 @@ hover_img = pygame.image.load("assets/images/hover_button.png")
 hover_special_card = pygame.image.load("assets/images/hover_special_card.png")
 
 #INPUT BUTTON
-input_img = pygame.image.load("assets/images/start_button.png")
-input_button = button.Button(input_img, 150, SCREEN_H - 100, 2, hover_img)
+input_img = pygame.image.load("model/fight_button/fight-button.png")
+input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCREEN_H - 16 * SCALE - input_img.get_height(), 4, hover_img)
 
 #ENTER INPUT BUTTON
 enter_img = pygame.image.load("assets/images/enter_button.png")
-enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 100, 2, hover_img)
+enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img)
 
 #ATTACK BUTTON
 atk_img = pygame.image.load("assets/images/enter_button.png")
 atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
 
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
-player_health.hp = 25
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
-enemy_health.hp = 50
 atk_count = 0
 
 
