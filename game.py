@@ -116,7 +116,7 @@ def main_game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         word = word[:-1]
-                    elif event.unicode.isalpha() or event.unicode == '_':
+                    elif event.unicode.lower() in score.score:
                         word += event.unicode
                 card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
                 for char in word:
