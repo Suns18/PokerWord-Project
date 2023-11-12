@@ -6,10 +6,10 @@ background_url = "assets/images/word_list.png"
 main_font = "assets/fonts/bjg-pixel-brandon-james-greer.ttf"
 
 class Menu():
-    def __init__(self, x, y, scale, button_img, button_hover_img):
+    def __init__(self, x, y, scale, button_img, button_hover_img, sound):
         """Init"""
         self.menu = game_ui.GameUI(background_url, x, y, scale)
-        self.button = button.Button(button_img, self.menu.rect.right - 8, y + 8, scale * 0.5, button_hover_img)
+        self.button = button.Button(button_img, self.menu.rect.right - 8, y + 8, scale * 0.5, button_hover_img, sound)
     
 
     def show_word(self, screen, word_list):

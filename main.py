@@ -8,6 +8,7 @@ import health_bar, card, menu
 #ประกาศใช้งาน
 pygame.init
 pygame.font.init()
+pygame.mixer.init()
 
 #หัวข้อเกม
 pygame.display.set_caption("PyFight")
@@ -24,6 +25,17 @@ SCALE = 4
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+#SOUND
+button_click_sound = pygame.mixer.Sound("assets/sounds/gameboy-pluck.mp3")
+game_start_sound = pygame.mixer.Sound("assets/sounds/game-start.mp3")
+game_win_sound = pygame.mixer.Sound("assets/sounds/winsquare.mp3")
+game_lose_sound = pygame.mixer.Sound("assets/sounds/game-over.mp3")
+
+button_click_sound.set_volume(0.5)
+game_start_sound.set_volume(0.5)
+game_win_sound.set_volume(0.6)
+game_lose_sound.set_volume(0.4)
+
 #นำภาพเข้า
 background_img = pygame.image.load("assets/images/menu_background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
@@ -39,28 +51,28 @@ hover_menu = pygame.image.load("assets/images/word_list_menu_hover.png")
 
 #START
 start_img = pygame.image.load("assets/images/start_button.png")
-start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 5, hover_img)
+start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery, 5, hover_img, game_start_sound)
 
 #EXIT
 exit_img = pygame.image.load("assets/images/exit_button.png")
-exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5, hover_img)
-exit_popup_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
+exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5, hover_img, button_click_sound)
+exit_popup_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery, 3, hover_img, button_click_sound)
 
 #INPUT BUTTON
 input_img = pygame.image.load("model/fight_button/fight-button.png")
-input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCREEN_H - 16 * SCALE - input_img.get_height(), 4, hover_atk)
+input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCREEN_H - 16 * SCALE - input_img.get_height(), 4, hover_atk, button_click_sound)
 
 #ENTER INPUT BUTTON
 enter_img = pygame.image.load("assets/images/enter_button.png")
-enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img)
+enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img, button_click_sound)
 
 #CLOSE MENU
 close_menu_img = pygame.image.load("assets/images/close_button.png")
 
 #WORD LIST
 word_list_img = pygame.image.load("assets/images/word_list_menu.png")
-word_list_button = button.Button(word_list_img, 8 * SCALE, 64 * SCALE, 3, hover_menu)
-word_list = menu.Menu(16 * SCALE, 48 * SCALE, 4, close_menu_img, hover_menu)
+word_list_button = button.Button(word_list_img, 8 * SCALE, 64 * SCALE, 3, hover_menu, button_click_sound)
+word_list = menu.Menu(16 * SCALE, 48 * SCALE, 4, close_menu_img, hover_menu, button_click_sound)
 
 #FONT
 main_font = "assets/fonts/bjg-pixel-brandon-james-greer.ttf"
@@ -70,7 +82,7 @@ popup = game_ui.GameUI("assets/images/popup.png", screen_rect.centerx - (48 * 5)
 
 #CLOSE POPUP BUTTON
 close_img = pygame.image.load("assets/images/close_button.png")
-close_button = button.Button(close_img, (popup.rect.x + popup.image.get_width() - 8), popup.rect.y + 8, 2, hover_menu)
+close_button = button.Button(close_img, (popup.rect.x + popup.image.get_width() - 8), popup.rect.y + 8, 2, hover_menu, button_click_sound)
 
 
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
@@ -80,11 +92,13 @@ atk_count = 0
 vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
 
 
-
 #แสดงเกม
 def main_menu():
     """Main Menu Screen"""
     running = True
+    pygame.mixer.music.load("assets/sounds/pixel-perfect.mp3")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(loops=-1, fade_ms=1000)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,6 +132,9 @@ def show_health():
 
 def main_game():
     """main game"""
+    pygame.mixer.music.load("assets/sounds/man-is-he-mega-glbml.mp3")
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(loops=-1, fade_ms=1000)
     word = ""
     input_active = False
 
@@ -175,7 +192,7 @@ def main_game():
                 #เช็คการใช้ special card
                 if special_card.state == True:
                     special_card_posy -= 50
-                special_button = button.Button(special_img, special_card_posx, special_card_posy, 2.5, hover_special_card)
+                special_button = button.Button(special_img, special_card_posx, special_card_posy, 2.5, hover_special_card, button_click_sound)
                 #กดใช้ special card
                 if special_button.draw(screen):
                     if special_card.state == True:
@@ -261,6 +278,8 @@ def main_game():
                         if enemy_health.hp <= 0:
                             popup_active = True
                             popup_message = "You Win!!!"
+                            pygame.mixer.music.unload()
+                            game_win_sound.play()
                             game_end = True
                         elif enemy_health.hp <= 20:
                             player_health.hp -= 10
@@ -271,6 +290,8 @@ def main_game():
                         if player_health.hp <= 0:
                             popup_active = True
                             popup_message = "You Lose!!!"
+                            pygame.mixer.music.unload()
+                            game_lose_sound.play()
                             game_end = True
                     else:
                         popup_active = True
