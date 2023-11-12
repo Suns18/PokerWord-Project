@@ -33,6 +33,13 @@ enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery
 atk_img = pygame.image.load("assets/images/enter_button.png")
 atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
 
+#CLOSE BUTTON
+close_img = pygame.image.load("assets/images/exit_button.png")
+close_button = button.Button(close_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
+
+#POPUP
+popup = game_ui.GameUI("assets/images/popup.png", screen_rect.centerx - (48 * 5), screen_rect.centery - 90, 5)
+
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
 atk_count = 0
@@ -57,10 +64,12 @@ def show_health():
  
 def main_game():
     """main game"""
-    base_font = pygame.font.Font(None, 64)
-    text_input = ""
+    base_font = pygame.font.Font(None, 32)
     word = ""
     input_active = False
+
+    popup_active = False
+    popup_message = ""
 
     my_special_cards = []
     special_cards = ["holy_pizza_card", "holy_shield_card", "holy_damage_card"]
@@ -72,6 +81,13 @@ def main_game():
         for event in pygame.event.get():
             screen.blit(background, (0, 0))
             show_health()
+
+            if popup_active:
+                popup.draw(screen)
+                text_surface = base_font.render(popup_message, True, (255, 255, 255))
+                screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), screen_rect.centery - 60))
+                if close_button.draw(screen) or input_active == True:
+                    popup_active = False
 
             special_card_posx = screen_rect.centerx - (75 * (len(my_special_cards) - 1))
             #show special card on screen
@@ -92,17 +108,17 @@ def main_game():
                             icard.state = False
                         special_card.state = True
                 special_card_posx += 150
+
             if input_button.draw(screen):
                 input_active = True
             #input field
             if input_active:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
-                        text_input = text_input[:-1]
+                        word = word[:-1]
                     elif event.unicode.isalpha() or event.unicode == '_':
-                        text_input += event.unicode
+                        word += event.unicode
                 card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
-                word = text_input
                 for char in word:
                     if char == '_':
                         char = 'underscore'
@@ -111,7 +127,6 @@ def main_game():
                     card_posx += 100
                 global enemy_health, player_health, atk_count
                 if enter_button.draw(screen):
-                    word = text_input
                     attack = 0
                     attack_random = True
                     #เช็คคำ
@@ -168,9 +183,9 @@ def main_game():
                         if player_health.hp <= 0:
                             print("You Lose")
                     else:
-                        print("please input again")
+                        popup_active = True
+                        popup_message = word + " is not a Python method."
                     word = ""
-                    text_input = ""
                     input_active = False
     
             if event.type == pygame.QUIT:
