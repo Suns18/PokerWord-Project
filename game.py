@@ -84,11 +84,11 @@ def main_game():
             if popup_active:
                 popup.draw(screen)
                 font_size = 32
-                base_font = pygame.font.Font(None, font_size)
+                base_font = pygame.font.Font("assets/fonts/bjg-pixel-brandon-james-greer.ttf", font_size)
                 text_surface = base_font.render(popup_message, True, (107, 68, 70))
-                while text_surface.get_width() > popup.image.get_width() - 30:
+                while text_surface.get_width() > popup.image.get_width() - 10:
                     font_size -= 1
-                    base_font = pygame.font.Font(None, font_size)
+                    base_font = pygame.font.Font("assets/fonts/bjg-pixel-brandon-james-greer.ttf", font_size)
                     text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), (popup.rect.y) + (popup.image.get_height()//2) - 10))
                 if close_button.draw(screen) or input_active == True:
