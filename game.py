@@ -30,10 +30,6 @@ input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCRE
 enter_img = pygame.image.load("assets/images/enter_button.png")
 enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img)
 
-#ATTACK BUTTON
-atk_img = pygame.image.load("assets/images/enter_button.png")
-atk_button = button.Button(atk_img, 1130, SCREEN_H - 100, 2, hover_img)
-
 #CLOSE BUTTON
 close_img = pygame.image.load("assets/images/exit_button.png")
 close_button = button.Button(close_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
@@ -85,7 +81,7 @@ def main_game():
 
             if popup_active:
                 popup.draw(screen)
-                text_surface = base_font.render(popup_message, True, (107, 68, 70))
+                text_surface = base_font.render(popup_message, True, (255, 255, 255))
                 screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), screen_rect.centery - 60))
                 if close_button.draw(screen) or input_active == True:
                     popup_active = False
@@ -113,19 +109,26 @@ def main_game():
             if input_button.draw(screen):
                 input_active = True
             #input field
+            card_scale = 2.5
+            card_gap = 100
             if input_active:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         word = word[:-1]
-                    elif event.unicode.lower() in score.score:
+                    elif event.unicode.lower() in score.score and len(word) < 27:
                         word += event.unicode
-                card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
+                if len(word) > 12:
+                    card_scale -= 0.1 * (len(word) - 12)
+                    card_scale = max(card_scale, 1.6)
+                    card_gap -= 5 * (len(word) - 12)
+                    card_gap = max(card_gap, 45)
+                card_posx = (screen_rect.centerx - (32*card_scale)//2) - ((card_gap//2) * (len(word) - 1))
                 for char in word:
                     if char == '_':
                         char = 'underscore'
-                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2)
+                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, card_scale)
                     card_img.draw(screen)
-                    card_posx += 100
+                    card_posx += card_gap
                 global enemy_health, player_health, atk_count
                 if enter_button.draw(screen):
                     attack = 0
@@ -185,7 +188,7 @@ def main_game():
                             print("You Lose")
                     else:
                         popup_active = True
-                        popup_message = "\"" + word + "\" is not a Python method."
+                        popup_message = word + " is not a Python method."
                     word = ""
                     input_active = False
     
