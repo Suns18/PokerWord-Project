@@ -20,10 +20,11 @@ background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 #HOVER
 hover_img = pygame.image.load("assets/images/hover_button.png")
 hover_special_card = pygame.image.load("assets/images/hover_special_card.png")
+hover_atk = pygame.image.load("model/fight_button/hover_fight_button.png")
 
 #INPUT BUTTON
 input_img = pygame.image.load("model/fight_button/fight-button.png")
-input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCREEN_H - 16 * SCALE - input_img.get_height(), 4, hover_img)
+input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCREEN_H - 16 * SCALE - input_img.get_height(), 4, hover_atk)
 
 #ENTER INPUT BUTTON
 enter_img = pygame.image.load("assets/images/enter_button.png")
@@ -84,7 +85,7 @@ def main_game():
 
             if popup_active:
                 popup.draw(screen)
-                text_surface = base_font.render(popup_message, True, (255, 255, 255))
+                text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), screen_rect.centery - 60))
                 if close_button.draw(screen) or input_active == True:
                     popup_active = False
@@ -122,7 +123,7 @@ def main_game():
                 for char in word:
                     if char == '_':
                         char = 'underscore'
-                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
+                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2)
                     card_img.draw(screen)
                     card_posx += 100
                 global enemy_health, player_health, atk_count
@@ -184,7 +185,7 @@ def main_game():
                             print("You Lose")
                     else:
                         popup_active = True
-                        popup_message = word + " is not a Python method."
+                        popup_message = "\"" + word + "\" is not a Python method."
                     word = ""
                     input_active = False
     
