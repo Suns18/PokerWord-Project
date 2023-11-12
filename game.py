@@ -41,7 +41,6 @@ player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
 atk_count = 0
 
-
 vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
 
 
@@ -68,6 +67,10 @@ def main_game():
     popup_active = False
     popup_message = ""
 
+    global player_health, enemy_health, atk_count
+    player_health.hp = player_health.max_hp
+    enemy_health.hp = enemy_health.max_hp
+
     my_special_cards = []
     special_cards = ["holy_pizza_card", "holy_shield_card", "holy_damage_card"]
 
@@ -81,7 +84,7 @@ def main_game():
 
             if popup_active:
                 popup.draw(screen)
-                text_surface = base_font.render(popup_message, True, (255, 255, 255))
+                text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), screen_rect.centery - 60))
                 if close_button.draw(screen) or input_active == True:
                     popup_active = False
@@ -129,7 +132,6 @@ def main_game():
                     card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, card_scale)
                     card_img.draw(screen)
                     card_posx += card_gap
-                global enemy_health, player_health, atk_count
                 if enter_button.draw(screen):
                     attack = 0
                     attack_random = True
@@ -188,7 +190,7 @@ def main_game():
                             print("You Lose")
                     else:
                         popup_active = True
-                        popup_message = word + " is not a Python method."
+                        popup_message = "\"" + word + "\" is not a Python method."
                     word = ""
                     input_active = False
     
