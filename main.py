@@ -44,6 +44,7 @@ start_button = button.Button(start_img, screen_rect.centerx, screen_rect.centery
 #EXIT
 exit_img = pygame.image.load("assets/images/exit_button.png")
 exit_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery + 128, 5, hover_img)
+exit_popup_button = button.Button(exit_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
 
 #INPUT BUTTON
 input_img = pygame.image.load("model/fight_button/fight-button.png")
@@ -152,20 +153,19 @@ def main_game():
             if popup_active:
                 popup.draw(screen)
                 font_size = 32
-                if game_end:
-                    base_font = pygame.font.Font(main_font, 16)
-                    text_surface = base_font.render(popup_message, True, (107, 68, 70))
-                    if close_button.draw(screen):
-                        main_menu()
                 base_font = pygame.font.Font(main_font, font_size)
                 text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 while text_surface.get_width() > popup.image.get_width() - 10:
                     font_size -= 1
                     base_font = pygame.font.Font(main_font, font_size)
                     text_surface = base_font.render(popup_message, True, (107, 68, 70))
-                screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), (popup.rect.y) + (popup.image.get_height()//2) - 10))
-                if close_button.draw(screen) or input_active == True:
-                    popup_active = False
+                screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), (popup.rect.y + max(0, (popup.image.get_height()//2) - text_surface.get_height()) + 10)))
+                if game_end:
+                    if exit_popup_button.draw(screen):
+                        main_menu()
+                else:
+                    if close_button.draw(screen) or input_active == True:
+                        popup_active = False
 
             special_card_posx = screen_rect.centerx - (75 * (len(my_special_cards) - 1))
             #show special card on screen
@@ -187,7 +187,7 @@ def main_game():
                         special_card.state = True
                 special_card_posx += 150
 
-            if input_button.draw(screen):
+            if input_button.draw(screen) and not game_end:
                 input_active = True
             #input field
             card_scale = 2.5
