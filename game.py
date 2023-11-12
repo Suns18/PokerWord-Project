@@ -112,19 +112,26 @@ def main_game():
             if input_button.draw(screen):
                 input_active = True
             #input field
+            card_scale = 2.5
+            card_gap = 100
             if input_active:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         word = word[:-1]
-                    elif event.unicode.lower() in score.score:
+                    elif event.unicode.lower() in score.score and len(word) < 27:
                         word += event.unicode
-                card_posx = (screen_rect.centerx - 40) - (50 * (len(word) - 1))
+                if len(word) > 12:
+                    card_scale -= 0.1 * (len(word) - 12)
+                    card_scale = max(card_scale, 1.6)
+                    card_gap -= 5 * (len(word) - 12)
+                    card_gap = max(card_gap, 45)
+                card_posx = (screen_rect.centerx - (32*card_scale)//2) - ((card_gap//2) * (len(word) - 1))
                 for char in word:
                     if char == '_':
                         char = 'underscore'
-                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, 2.5)
+                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, card_scale)
                     card_img.draw(screen)
-                    card_posx += 100
+                    card_posx += card_gap
                 global enemy_health, player_health, atk_count
                 if enter_button.draw(screen):
                     attack = 0
