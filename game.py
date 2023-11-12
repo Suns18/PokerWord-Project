@@ -147,7 +147,7 @@ def main_game():
                     if event.key == pygame.K_BACKSPACE:
                         word = word[:-1]
                     elif event.unicode.lower() in score.score and len(word) < 27:
-                        word += event.unicode
+                        word += event.unicode.lower()
                 if len(word) > 12:
                     card_scale -= 0.1 * (len(word) - 12)
                     card_scale = max(card_scale, 1.6)
