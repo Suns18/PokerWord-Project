@@ -4,7 +4,7 @@ import game_ui
 import button
 import score
 import random
-import health_bar, card
+import health_bar, card, menu
 
 pygame.init()
 
@@ -21,6 +21,7 @@ background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 hover_img = pygame.image.load("assets/images/hover_button.png")
 hover_special_card = pygame.image.load("assets/images/hover_special_card.png")
 hover_atk = pygame.image.load("model/fight_button/hover_fight_button.png")
+hover_menu = pygame.image.load("assets/images/word_list_menu_hover.png")
 
 #INPUT BUTTON
 input_img = pygame.image.load("model/fight_button/fight-button.png")
@@ -33,6 +34,18 @@ enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery
 #CLOSE BUTTON
 close_img = pygame.image.load("assets/images/exit_button.png")
 close_button = button.Button(close_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
+
+#CLOSE MENU
+close_menu_img = pygame.image.load("assets/images/close_button.png")
+
+#WORD LIST
+word_list_img = pygame.image.load("assets/images/word_list_menu.png")
+word_list_button = button.Button(word_list_img, 8 * SCALE, 64 * SCALE, 3, hover_menu)
+word_list = menu.Menu(16 * SCALE, 48 * SCALE, 4, close_menu_img, hover_menu)
+
+#FONT
+main_font = "assets/fonts/bjg-pixel-brandon-james-greer.ttf"
+
 
 #POPUP
 popup = game_ui.GameUI("assets/images/popup.png", screen_rect.centerx - (48 * 5), screen_rect.centery - 90, 5)
@@ -76,19 +89,29 @@ def main_game():
     used_word = []
     spam = False
 
+    show_word_list = False
+
     while True:
         for event in pygame.event.get():
             screen.blit(background, (0, 0))
             show_health()
+            if word_list_button.draw(screen):
+                show_word_list = True
+
+            if show_word_list:
+                word_list.show(screen, used_word)
+                if word_list.button.draw(screen):
+                    show_word_list = False
+            
 
             if popup_active:
                 popup.draw(screen)
                 font_size = 32
-                base_font = pygame.font.Font("assets/fonts/bjg-pixel-brandon-james-greer.ttf", font_size)
+                base_font = pygame.font.Font(main_font, font_size)
                 text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 while text_surface.get_width() > popup.image.get_width() - 10:
                     font_size -= 1
-                    base_font = pygame.font.Font("assets/fonts/bjg-pixel-brandon-james-greer.ttf", font_size)
+                    base_font = pygame.font.Font(main_font, font_size)
                     text_surface = base_font.render(popup_message, True, (107, 68, 70))
                 screen.blit(text_surface, (screen_rect.centerx - (text_surface.get_width()//2), (popup.rect.y) + (popup.image.get_height()//2) - 10))
                 if close_button.draw(screen) or input_active == True:

@@ -8,7 +8,7 @@ class Button():
         height = image.get_height() * scale
         self.image = pygame.transform.scale(image, (int(width), int(height)))
         self.rect = self.image.get_rect()
-        self.rect.topleft = (pos_x - width//2, pos_y - height//2)
+        self.rect.center = (pos_x, pos_y)
         self.clicked = False
 
         #hover

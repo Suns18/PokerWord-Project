@@ -1,5 +1,6 @@
 """Health Bar"""
 import pygame
+import math
 
 HP_IMG = pygame.image.load("assets/images/health_bar.png")
 NUMBER_IMG = pygame.image.load("assets/images/health_number.png")
@@ -47,7 +48,7 @@ class HealthBar():
         hp_percent = self.hp / self.max_hp * 100
         grid_percent = 100 / (self.grid_width)
         for i in range(1, self.grid_width + 1):
-            hp_type = 0 if hp_percent >= grid_percent * i else 4 if hp_percent < grid_percent * i else (int((grid_percent * i - hp_percent) / grid_percent) * 4)
+            hp_type = 0 if hp_percent >= grid_percent * i else 4 if hp_percent < grid_percent * (i - 1) else 4 - math.ceil((grid_percent * i - hp_percent) / grid_percent * 0.25)
             screen.blit(self.show_hp_level(hp_type), (self.x + (i-1) * self.scale, self.y))
 
     def draw(self, screen):
