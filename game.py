@@ -31,10 +31,6 @@ input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCRE
 enter_img = pygame.image.load("assets/images/enter_button.png")
 enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img)
 
-#CLOSE BUTTON
-close_img = pygame.image.load("assets/images/exit_button.png")
-close_button = button.Button(close_img, screen_rect.centerx, screen_rect.centery, 3, hover_img)
-
 #CLOSE MENU
 close_menu_img = pygame.image.load("assets/images/close_button.png")
 
@@ -46,9 +42,13 @@ word_list = menu.Menu(16 * SCALE, 48 * SCALE, 4, close_menu_img, hover_menu)
 #FONT
 main_font = "assets/fonts/bjg-pixel-brandon-james-greer.ttf"
 
-
 #POPUP
 popup = game_ui.GameUI("assets/images/popup.png", screen_rect.centerx - (48 * 5), screen_rect.centery - 90, 5)
+
+#CLOSE POPUP BUTTON
+close_img = pygame.image.load("assets/images/close_button.png")
+close_button = button.Button(close_img, (popup.rect.x + popup.image.get_width() - 8), popup.rect.y + 8, 2, hover_menu)
+
 
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
