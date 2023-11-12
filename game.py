@@ -91,6 +91,8 @@ def main_game():
 
     show_word_list = False
 
+    game_end = False
+
     while True:
         for event in pygame.event.get():
             screen.blit(background, (0, 0))
@@ -102,13 +104,15 @@ def main_game():
                 word_list.show(screen, used_word)
                 if word_list.button.draw(screen):
                     show_word_list = False
-            
 
             if popup_active:
                 popup.draw(screen)
                 font_size = 32
-                base_font = pygame.font.Font(main_font, font_size)
-                text_surface = base_font.render(popup_message, True, (107, 68, 70))
+                if game_end:
+                    base_font = pygame.font.Font(main_font, 16)
+                    text_surface = base_font.render(popup_message, True, (107, 68, 70))
+                    if close_button.draw(screen):
+                        main_game()
                 while text_surface.get_width() > popup.image.get_width() - 10:
                     font_size -= 1
                     base_font = pygame.font.Font(main_font, font_size)
@@ -209,7 +213,9 @@ def main_game():
                         if player_health.shield:
                             player_health.shield = False
                         if enemy_health.hp <= 0:
-                            print("You Win")
+                            popup_active = True
+                            popup_message = "You Win!!!"
+                            game_end = True
                         elif enemy_health.hp <= 20:
                             player_health.hp -= 10
                         elif enemy_health.hp <= 50:
@@ -217,7 +223,9 @@ def main_game():
                         elif enemy_health.hp <= 100:
                             player_health.hp -= 3
                         if player_health.hp <= 0:
-                            print("You Lose")
+                            popup_active = True
+                            popup_message = "You Lose!!!"
+                            game_end = True
                     else:
                         popup_active = True
                         popup_message = "\"" + word + "\" is not a Python method."
