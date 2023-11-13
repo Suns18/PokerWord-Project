@@ -1,14 +1,14 @@
 import pygame
 class Button():
     """Class for button"""
-    def __init__(self, image, pos_x, pos_y, scale, hover):
+    def __init__(self, image, pos_x, pos_y, scale, hover, sound):
         """Init"""
         #button
         width = image.get_width() * scale
         height = image.get_height() * scale
         self.image = pygame.transform.scale(image, (int(width), int(height)))
         self.rect = self.image.get_rect()
-        self.rect.topleft = (pos_x - width//2, pos_y - height//2)
+        self.rect.center = (pos_x, pos_y)
         self.clicked = False
 
         #hover
@@ -18,6 +18,8 @@ class Button():
         self.hover_rect = self.hover.get_rect()
         self.hover_rect.topleft = (self.rect.x - (3 * scale), self.rect.y - (3 * scale))
 
+        self.sound = sound
+
     def draw(self, screen):
         """Draw button on screen"""
         action = False
@@ -25,6 +27,7 @@ class Button():
         if self.rect.collidepoint(pos):
             screen.blit(self.hover, (self.hover_rect.x, self.hover_rect.y))
             if pygame.mouse.get_pressed()[0] and self.clicked == False:
+                self.sound.play()
                 self.clicked = True
                 action = True
             if not pygame.mouse.get_pressed()[0]:
