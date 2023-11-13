@@ -92,7 +92,7 @@ enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE
 enemy = character.Character(160 * SCALE, 64 * SCALE, 40, "assets/character/bear", enemy_health)
 atk_count = 0
 
-vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
+vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (48 * SCALE), 8 * SCALE, SCALE)
 
 
 #แสดงเกม
