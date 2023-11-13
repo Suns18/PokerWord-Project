@@ -19,4 +19,4 @@ class Character():
         return action_area
 
     def action(self, screen, action):
-        screen.blit(self.action_frame(action), (self.x, self.y))
+        screen.blit(self.action_frame(action), (self.x + 12, self.y + 12))

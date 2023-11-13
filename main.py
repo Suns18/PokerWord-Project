@@ -64,15 +64,15 @@ input_button = button.Button(input_img, 16 * SCALE + input_img.get_width(), SCRE
 
 #ENTER INPUT BUTTON
 enter_img = pygame.image.load("assets/images/enter_button.png")
-enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery + 16*SCALE, 3, hover_img, button_click_sound)
+enter_button = button.Button(enter_img, screen_rect.centerx, screen_rect.centery - 42*SCALE, 3, hover_img, button_click_sound)
 
 #CLOSE MENU
 close_menu_img = pygame.image.load("assets/images/close_button.png")
 
 #WORD LIST
 word_list_img = pygame.image.load("assets/images/word_list_menu.png")
-word_list_button = button.Button(word_list_img, 8 * SCALE, 64 * SCALE, 3, hover_menu, button_click_sound)
-word_list = menu.Menu(16 * SCALE, 48 * SCALE, 4, close_menu_img, hover_menu, button_click_sound)
+word_list_button = button.Button(word_list_img, 8 * SCALE, 84 * SCALE, 3, hover_menu, button_click_sound)
+word_list = menu.Menu(16 * SCALE, 72 * SCALE, 4, close_menu_img, hover_menu, button_click_sound)
 
 #FONT
 main_font = "assets/fonts/bjg-pixel-brandon-james-greer.ttf"
@@ -124,13 +124,6 @@ def show_health():
     vs_show.draw(screen)
     enemy_health.draw(screen)
 
-    #test
-    font = pygame.font.Font(None, 32)
-    player_per = player.health.hp / player.health.max_hp * 100
-    enemy_per = enemy_health.hp / enemy_health.max_hp * 100
-    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_per, enemy_per, player.health.shield, atk_count)
-    status_text = font.render(status, True, (255, 255, 255))
-    screen.blit(status_text, (0,0))
 
 
 def main_game():
@@ -231,7 +224,7 @@ def main_game():
                 for char in word:
                     if char == '_':
                         char = 'underscore'
-                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 150, card_scale)
+                    card_img = game_ui.GameUI("assets/alphabet_card/{}_card.png".format(char.lower()), card_posx, screen_rect.centery - 300, card_scale)
                     card_img.draw(screen)
                     card_posx += card_gap
                 if enter_button.draw(screen):
