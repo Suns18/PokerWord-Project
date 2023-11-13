@@ -2,7 +2,6 @@
 
 PyFight Game, is a part of **06066303 PROBLEM SOLVING AND COMPUTER PROGRAMMING (Academic Year 2023)**, School of Information Technology, King Mongkut's Institute of Technology Ladkrabang.
 
-# About
 
 # Team Member
 
