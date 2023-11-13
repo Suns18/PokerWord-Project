@@ -3,10 +3,10 @@ import button
 import game_ui
 import score
 import random
-import health_bar, card, menu
+import health_bar, card, menu, character
 
 #ประกาศใช้งาน
-pygame.init
+pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
@@ -40,7 +40,7 @@ game_lose_sound.set_volume(0.4)
 background_img = pygame.image.load("assets/images/menu_background.png")
 background = pygame.transform.scale(background_img, (SCREEN_W, SCREEN_H))
 
-game_background_img = pygame.image.load("assets/images/game_background.png")
+game_background_img = pygame.image.load("assets/images/game_bg.jpg")
 game_background = pygame.transform.scale(game_background_img, (SCREEN_W, SCREEN_H))
 
 #HOVER
@@ -86,7 +86,10 @@ close_button = button.Button(close_img, (popup.rect.x + popup.image.get_width() 
 
 
 player_health = health_bar.HealthBar(8 * SCALE, 16 * SCALE, 8, 1, 4, 50, False)
+player = character.Character(64 * SCALE, 80 * SCALE, 32, "assets/character/player", player_health)
+
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
+enemy = character.Character(160 * SCALE, 64 * SCALE, 40, "assets/character/bear", enemy_health)
 atk_count = 0
 
 vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (16 * SCALE), 8 * SCALE, SCALE)
@@ -117,15 +120,15 @@ def main_menu():
 
 def show_health():
     """Show player and enemy health"""
-    player_health.draw(screen)
+    player.health.draw(screen)
     vs_show.draw(screen)
     enemy_health.draw(screen)
 
     #test
     font = pygame.font.Font(None, 32)
-    player_per = player_health.hp / player_health.max_hp * 100
+    player_per = player.health.hp / player.health.max_hp * 100
     enemy_per = enemy_health.hp / enemy_health.max_hp * 100
-    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_per, enemy_per, player_health.shield, atk_count)
+    status = "player:{} ---- enemy:{} ---- sheild:{} ---- atk_count:{}".format(player_per, enemy_per, player.health.shield, atk_count)
     status_text = font.render(status, True, (255, 255, 255))
     screen.blit(status_text, (0,0))
 
@@ -141,8 +144,8 @@ def main_game():
     popup_active = False
     popup_message = ""
 
-    global player_health, enemy_health, atk_count
-    player_health.hp = player_health.max_hp
+    global player, enemy_health, atk_count, last_update
+    player.health.hp = player.health.max_hp
     enemy_health.hp = enemy_health.max_hp
 
     my_special_cards = []
@@ -153,12 +156,16 @@ def main_game():
 
     show_word_list = False
 
+    bear_phase = "phase1"
+
     game_end = False
 
     while True:
         for event in pygame.event.get():
             screen.blit(game_background, (0, 0))
             show_health()
+            player.action(screen, "idle")
+            enemy.action(screen, bear_phase)
             if word_list_button.draw(screen):
                 show_word_list = True
 
@@ -252,9 +259,9 @@ def main_game():
                         for special_card in my_special_cards:
                             if special_card.state == True:
                                 if special_card.name == "holy_pizza_card":
-                                    player_health.hp = min(player_health.max_hp, player_health.hp + 10)
+                                    player.health.hp = min(player.health.max_hp, player.health.hp + 10)
                                 elif special_card.name == "holy_shield_card":
-                                    player_health.shield = True
+                                    player.health.shield = True
                                 elif special_card.name == "holy_damage_card":
                                     attack_random = False
                                 my_special_cards.remove(special_card)
@@ -271,23 +278,30 @@ def main_game():
                             spam = False
                         elif attack_random and not spam:
                             enemy_health.hp -= int(random.uniform(attack*0.2, attack))
+                        enemy.action(screen, "damaged")
                             
                         #หมีตี
-                        if player_health.shield:
-                            player_health.shield = False
                         if enemy_health.hp <= 0:
                             popup_active = True
                             popup_message = "You Win!!!"
+                            bear_phase = "dead"
                             pygame.mixer.music.unload()
                             game_win_sound.play()
                             game_end = True
+                        if player.health.shield == False:
+                            player.action(screen, "damaged")
+                        if player.health.shield:
+                            player.health.shield = False
                         elif enemy_health.hp <= 20:
-                            player_health.hp -= 10
+                            player.health.hp -= 10
+                            bear_phase = "phase3"
                         elif enemy_health.hp <= 50:
-                            player_health.hp -= 5
+                            player.health.hp -= 5
+                            bear_phase = "phase2"
                         elif enemy_health.hp <= 100:
-                            player_health.hp -= 3
-                        if player_health.hp <= 0:
+                            player.health.hp -= 3
+                            bear_phase = "phase1"
+                        if player.health.hp <= 0:
                             popup_active = True
                             popup_message = "You Lose!!!"
                             pygame.mixer.music.unload()
