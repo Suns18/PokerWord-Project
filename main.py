@@ -26,10 +26,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 #SOUND
-button_click_sound = pygame.mixer.Sound("assets/sounds/gameboy-pluck.mp3")
-game_start_sound = pygame.mixer.Sound("assets/sounds/game-start.mp3")
-game_win_sound = pygame.mixer.Sound("assets/sounds/winsquare.mp3")
-game_lose_sound = pygame.mixer.Sound("assets/sounds/game-over.mp3")
+button_click_sound = pygame.mixer.Sound("assets/sounds/gameboy-pluck.ogg")
+game_start_sound = pygame.mixer.Sound("assets/sounds/game-start.ogg")
+game_win_sound = pygame.mixer.Sound("assets/sounds/winsquare.ogg")
+game_lose_sound = pygame.mixer.Sound("assets/sounds/game-over.ogg")
 
 button_click_sound.set_volume(0.5)
 game_start_sound.set_volume(0.5)
