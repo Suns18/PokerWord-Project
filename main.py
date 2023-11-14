@@ -90,7 +90,6 @@ player = character.Character(64 * SCALE, 80 * SCALE, 32, "assets/character/playe
 
 enemy_health = health_bar.HealthBar(screen_rect.centerx + 24 * SCALE, 16 * SCALE, 16, 1, 4, 100, False)
 enemy = character.Character(160 * SCALE, 64 * SCALE, 40, "assets/character/bear", enemy_health)
-atk_count = 0
 
 vs_show = game_ui.GameUI("assets/images/vs.png", screen_rect.centerx - (48 * SCALE), 8 * SCALE, SCALE)
 
@@ -131,13 +130,14 @@ def main_game():
     pygame.mixer.music.load("assets/sounds/man-is-he-mega-glbml.mp3")
     pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(loops=-1, fade_ms=1000)
+    atk_count = 0
     word = ""
     input_active = False
 
     popup_active = False
     popup_message = ""
 
-    global player, enemy_health, atk_count, last_update
+    global player, enemy_health, last_update
     player.health.hp = player.health.max_hp
     enemy_health.hp = enemy_health.max_hp
 
