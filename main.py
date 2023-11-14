@@ -137,7 +137,7 @@ def main_game():
     popup_active = False
     popup_message = ""
 
-    global player, enemy_health, last_update
+    global player, enemy_health
     player.health.hp = player.health.max_hp
     enemy_health.hp = enemy_health.max_hp
 
